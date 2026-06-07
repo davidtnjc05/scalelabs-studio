@@ -1,5 +1,8 @@
 {
-    "name": "ScaleLabs Studio",
-    "buildCommand": "bun run build",
-    "outputDirectory": "dist"
+      "name": "ScaleLabs Studio",
+      "buildCommand": "bun run build",
+      "outputDirectory": "dist",
+      "rewrites": [
+              { "source": "/(.*)", "destination": "/index.html" }
+      ]
 }
