@@ -5,6 +5,8 @@ import tsconfigPaths from "vite-tsconfig-paths";
 import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
 import path from "node:path";
 
+const stub = path.resolve(__dirname, "./src/stubs/empty.ts");
+
 export default defineConfig({
   plugins: [
     TanStackRouterVite({
@@ -16,16 +18,13 @@ export default defineConfig({
     tsconfigPaths(),
   ],
   resolve: {
-    alias: { "@": path.resolve(__dirname, "./src") },
-  },
-  build: {
-    rollupOptions: {
-      external: [
-        /^@lovable\.dev\//,
-        /^@tanstack\/react-start/,
-        /^@tanstack\/start/,
-        /^node:/,
-      ],
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+      "@lovable.dev/webhooks-js": stub,
+      "@lovable.dev/email-js": stub,
+      "@lovable.dev/vite-tanstack-config": stub,
+      "@tanstack/react-start": stub,
+      "@tanstack/start-storage-context": stub,
     },
   },
 });
