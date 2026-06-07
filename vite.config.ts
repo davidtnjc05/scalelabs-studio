@@ -6,15 +6,23 @@ import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
 import path from "node:path";
 
 export default defineConfig({
-    plugins: [
-          TanStackRouterVite({ autoCodeSplitting: true }),
-          react(),
-          tailwindcss(),
-          tsconfigPaths(),
-        ],
-    resolve: {
-          alias: {
-                  "@": path.resolve(__dirname, "./src"),
-          },
-    },
+      plugins: [
+              TanStackRouterVite({ autoCodeSplitting: true }),
+              react(),
+              tailwindcss(),
+              tsconfigPaths(),
+            ],
+      resolve: {
+              alias: {
+                        "@": path.resolve(__dirname, "./src"),
+              },
+      },
+      build: {
+              rollupOptions: {
+                        external: [
+                                    "@lovable.dev/webhooks-js",
+                                    "@lovable.dev/vite-tanstack-config",
+                                  ],
+              },
+      },
 });
