@@ -5,14 +5,49 @@ import tsconfigPaths from "vite-tsconfig-paths";
 import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
 import path from "node:path";
 
-const stub = path.resolve(__dirname, "./src/stubs/empty.ts");
+// Plugin: ersetzt alle lovable/email Backend-Routen durch leere Stubs
+function stubBackendRoutes() {
+  return {
+    name: "stub-backend-routes",
+    resolveId(id, importer) {
+      if (
+        importer &&
+        (importer.includes("/routes/lovable/") ||
+          importer.includes("/routes/email/"))
+      ) {
+        return "\0virtual:stub";
+      }
+      if (
+        id.includes("/routes/lovable/") ||
+        id.includes("/routes/email/") ||
+        id.includes("@lovable.dev") ||
+        id.includes("@tanstack/react-start") ||
+        id.includes("@tanstack/start-storage-context")
+      ) {
+        return "\0virtual:stub";
+      }
+    },
+    load(id) {
+      if (id === "\0virtual:stub") {
+        return `export default {};
+export const Route = { options: {} };
+export const createServerFn = () => () => {};
+export const createMiddleware = () => () => {};
+export const json = (d) => d;
+export const redirect = (u) => ({ url: u });
+export const useServerFn = (f) => f;
+export const WebhookError = class extends Error {};
+export const verifyWebhookRequest = () => Promise.resolve({});
+`;
+      }
+    },
+  };
+}
 
 export default defineConfig({
   plugins: [
-    TanStackRouterVite({
-      autoCodeSplitting: true,
-      exclude: ["**/lovable/**", "**/email/**"],
-    }),
+    stubBackendRoutes(),
+    TanStackRouterVite({ autoCodeSplitting: true }),
     react(),
     tailwindcss(),
     tsconfigPaths(),
@@ -20,11 +55,6 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
-      "@lovable.dev/webhooks-js": stub,
-      "@lovable.dev/email-js": stub,
-      "@lovable.dev/vite-tanstack-config": stub,
-      "@tanstack/react-start": stub,
-      "@tanstack/start-storage-context": stub,
     },
   },
 });
