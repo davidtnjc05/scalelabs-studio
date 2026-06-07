@@ -21,7 +21,7 @@ function stubBackendRoutes() {
         enforce: "pre" as const,
     resolveId(id) {
             if (LOVABLE_PKGS.some(pkg => id === pkg || id.startsWith(pkg + '/'))) {
-        return { id: STUB_ID, syntheticNamedExports: true };
+                        return path.resolve(__dirname, "src/stubs/empty.ts");
       }
     },
     load(id) {
