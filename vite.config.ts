@@ -12,13 +12,14 @@ const LOVABLE_PKGS = [
   "@lovable.dev/vite-tanstack-config",
   "@tanstack/react-start",
   "@tanstack/start-storage-context",
+    "node:async_hooks",
 ];
 
 function stubBackendRoutes() {
   return {
     name: "stub-backend-routes",
     resolveId(id) {
-      if (LOVABLE_PKGS.includes(id)) {
+            if (LOVABLE_PKGS.some(pkg => id === pkg || id.startsWith(pkg + '/'))) {
         return { id: STUB_ID, syntheticNamedExports: true };
       }
     },
