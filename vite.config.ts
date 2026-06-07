@@ -5,40 +5,26 @@ import tsconfigPaths from "vite-tsconfig-paths";
 import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
 import path from "node:path";
 
-// Plugin: ersetzt alle lovable/email Backend-Routen durch leere Stubs
+const STUB_ID = "\0virtual:stub";
+const LOVABLE_PKGS = [
+  "@lovable.dev/webhooks-js",
+  "@lovable.dev/email-js",
+  "@lovable.dev/vite-tanstack-config",
+  "@tanstack/react-start",
+  "@tanstack/start-storage-context",
+];
+
 function stubBackendRoutes() {
   return {
     name: "stub-backend-routes",
-    resolveId(id, importer) {
-      if (
-        importer &&
-        (importer.includes("/routes/lovable/") ||
-          importer.includes("/routes/email/"))
-      ) {
-        return "\0virtual:stub";
-      }
-      if (
-        id.includes("/routes/lovable/") ||
-        id.includes("/routes/email/") ||
-        id.includes("@lovable.dev") ||
-        id.includes("@tanstack/react-start") ||
-        id.includes("@tanstack/start-storage-context")
-      ) {
-        return "\0virtual:stub";
+    resolveId(id) {
+      if (LOVABLE_PKGS.includes(id)) {
+        return { id: STUB_ID, syntheticNamedExports: true };
       }
     },
     load(id) {
-      if (id === "\0virtual:stub") {
-        return `export default {};
-export const Route = { options: {} };
-export const createServerFn = () => () => {};
-export const createMiddleware = () => () => {};
-export const json = (d) => d;
-export const redirect = (u) => ({ url: u });
-export const useServerFn = (f) => f;
-export const WebhookError = class extends Error {};
-export const verifyWebhookRequest = () => Promise.resolve({});
-`;
+      if (id === STUB_ID) {
+        return "export default {};";
       }
     },
   };
