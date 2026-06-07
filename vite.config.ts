@@ -20,9 +20,8 @@ export default defineConfig({
       build: {
               rollupOptions: {
                         external: [
-                                    "@lovable.dev/webhooks-js",
-                                    "@lovable.dev/vite-tanstack-config",
-                                  ],
+                                      /^@lovable\.dev\//,
+                                    ]
               },
       },
 });
