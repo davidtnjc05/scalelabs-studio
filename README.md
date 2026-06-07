@@ -60,6 +60,8 @@ VITE_SUPABASE_URL
 
 David Tunjić — ScaleLabs Studio
 - GitHub: [@davidtnjc05](https://github.com/davidtnjc05)
+
+- ✅ **Deployed to Vercel** - Live Production Environment
 - Website: [scalelabsstudio.com](https://scalelabsstudio.com)
 
 ---
