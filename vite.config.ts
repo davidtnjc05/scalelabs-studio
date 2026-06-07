@@ -18,6 +18,7 @@ const LOVABLE_PKGS = [
 function stubBackendRoutes() {
   return {
     name: "stub-backend-routes",
+        enforce: "pre" as const,
     resolveId(id) {
             if (LOVABLE_PKGS.some(pkg => id === pkg || id.startsWith(pkg + '/'))) {
         return { id: STUB_ID, syntheticNamedExports: true };
